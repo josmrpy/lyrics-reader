@@ -8,7 +8,7 @@ import urllib.error
 import customtkinter as ctk
 from PIL import Image, ImageSequence
 
-APP_VERSION = "0.1.0"
+APP_VERSION = "0.1.1"
 SONGS_DB = "saved_songs.json"
 EMOJI_GIF = "emoji.gif"
 GIF_ANIM_INTERVAL = 100
@@ -100,7 +100,7 @@ def create_gif_frames(frames, size):
 
 
 class LyricsWindows(ctk.CTkToplevel):
-    def __init__(self, master, title, verses, gif_frames):
+    def __init__(self, master, title, verses, gif_frames):  # @josmr.py
         super().__init__(master)
 
         self.title = title
@@ -190,7 +190,7 @@ class LyricsWindows(ctk.CTkToplevel):
             justify="left",
             anchor="w",
             text_color="#2b2b2b",
-            padx=8,
+            padx=10,
         )
         self.verse_label.pack(side="left", expand=True, fill="both")
 
@@ -219,13 +219,11 @@ class LyricsWindows(ctk.CTkToplevel):
         return "Cerrar" if self.index == len(self.verses) - 1 else "OK"
 
     def start_drag(self, event):
-        self._offset_x = event.x_root - self.winfo_x()
-        self._offset_y = event.y_root - self.winfo_y()
+        self.x_offset = event.x_root - self.winfo_x()
+        self.y_offset = event.y_root - self.winfo_y()
 
     def drag(self, event):
-        self.geometry(
-            f"+{event.x_root - self._offset_x}+{event.y_root - self._offset_y}"
-        )
+        self.geometry(f"+{event.x_root - self.x_offset}+{event.y_root - self.y_offset}")
 
     def animate_gif(self):
         self.gif_label.configure(image=self.gif_frames[self.gif_index])
