@@ -8,6 +8,7 @@ import urllib.error
 import customtkinter as ctk
 from PIL import Image, ImageSequence
 
+APP_VERSION = "0.1.0"
 SONGS_DB = "saved_songs.json"
 EMOJI_GIF = "emoji.gif"
 GIF_ANIM_INTERVAL = 100
@@ -125,6 +126,7 @@ class LyricsWindows(ctk.CTkToplevel):
 
         self.bind("<space>", self.handle_ok)
         self.bind("<Return>", self.handle_ok)
+        self.bind("<Left>", self.handle_previous)
         self.bind("<Escape>", self.close)
 
         self.lift()
@@ -148,14 +150,6 @@ class LyricsWindows(ctk.CTkToplevel):
         bar_frame = ctk.CTkFrame(self.card, fg_color="transparent", height=24)
         bar_frame.pack(fill="x", padx=14, pady=(10, 0))
 
-        self.label_titulo = ctk.CTkLabel(
-            bar_frame,
-            text=self.title.lower(),
-            font=("Consolas", 12),
-            text_color="#555555",
-        )
-        self.label_titulo.pack(side="left")
-
         close_button = ctk.CTkButton(
             bar_frame,
             text="✕",
@@ -169,6 +163,14 @@ class LyricsWindows(ctk.CTkToplevel):
             command=self.close,
         )
         close_button.pack(side="right")
+
+        self.label_titulo = ctk.CTkLabel(
+            bar_frame,
+            text=self.title.lower(),
+            font=("Consolas", 12),
+            text_color="#555555",
+        )
+        self.label_titulo.pack(side="left")
 
         for widget in (bar_frame, self.label_titulo):
             widget.bind("<ButtonPress-1>", self.start_drag)
@@ -186,7 +188,9 @@ class LyricsWindows(ctk.CTkToplevel):
             font=("Georgia", 13),
             wraplength=210,
             justify="left",
+            anchor="w",
             text_color="#2b2b2b",
+            padx=8,
         )
         self.verse_label.pack(side="left", expand=True, fill="both")
 
@@ -236,6 +240,12 @@ class LyricsWindows(ctk.CTkToplevel):
         self.verse_label.configure(text=self.verses[self.index])
         self.ok_button.configure(text=self.get_button_text())
 
+    def handle_previous(self, event=None):
+        if self.index > 0:
+            self.index -= 1
+            self.verse_label.configure(text=self.verses[self.index])
+            self.ok_button.configure(text=self.get_button_text())
+
     def close(self, event=None):
         if self.animation_id is not None:
             self.after_cancel(self.animation_id)
@@ -270,7 +280,8 @@ def search_from_terminal():
 
 
 def main():
-    print("=== Buscador de letras ===")
+    print(f"=== Buscador de letras v{APP_VERSION} ===")
+    print("Made by Josimar M. (@josmr.py)\n")
     title, lyrics = search_from_terminal()
     if not lyrics:
         return
