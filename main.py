@@ -8,13 +8,19 @@ import urllib.error
 import customtkinter as ctk
 from PIL import Image, ImageSequence
 
-APP_VERSION = "0.2.0"
+APP_VERSION = "0.2.1"
 ASSETS_DIR = "assets"
 DATA_DIR = "data"
+
 SONGS_DB = os.path.join(DATA_DIR, "saved_songs.json")
 EMOJI_CONFIG = os.path.join(DATA_DIR, "default_emoji.txt")
 
-# Default emoji = "cray.gif" (a crying face)
+os.makedirs(DATA_DIR, exist_ok=True)
+
+if not os.path.exists(EMOJI_CONFIG):
+    with open(EMOJI_CONFIG, "w", encoding="utf-8") as f:
+        f.write("cray.gif\n") # Default emoji GIF
+
 with open(EMOJI_CONFIG, "r", encoding="utf-8") as f:
     EMOJI_NAME = f.readline().strip()
 
@@ -26,8 +32,6 @@ SAMPLE_SIZE = 32
 WINDOW_WIDTH = 340
 WINDOW_HEIGHT = 160
 TRANSPARENT_COLOR = "#ff00ff"
-
-SCRIPT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 
 
 def load_database():
