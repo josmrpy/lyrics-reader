@@ -8,9 +8,17 @@ import urllib.error
 import customtkinter as ctk
 from PIL import Image, ImageSequence
 
-APP_VERSION = "0.1.1"
-SONGS_DB = "saved_songs.json"
-EMOJI_GIF = "emoji.gif"
+APP_VERSION = "0.2.0"
+ASSETS_DIR = "assets"
+DATA_DIR = "data"
+SONGS_DB = os.path.join(DATA_DIR, "saved_songs.json")
+EMOJI_CONFIG = os.path.join(DATA_DIR, "default_emoji.txt")
+
+# Default emoji = "cray.gif" (a crying face)
+with open(EMOJI_CONFIG, "r", encoding="utf-8") as f:
+    EMOJI_NAME = f.readline().strip()
+
+EMOJI_GIF = os.path.join(ASSETS_DIR, EMOJI_NAME)
 GIF_ANIM_INTERVAL = 100
 GIF_SIZE = (62, 44)
 SAMPLE_SIZE = 32
@@ -289,7 +297,7 @@ def main():
     root.withdraw()
 
     gif_frames = create_gif_frames(
-        load_gif_frames(os.path.join(SCRIPT_DIRECTORY, EMOJI_GIF), GIF_SIZE),
+        load_gif_frames(EMOJI_GIF, GIF_SIZE),
         GIF_SIZE,
     )
 

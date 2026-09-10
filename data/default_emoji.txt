@@ -1,0 +1,3 @@
+cray.gif
+<- The first line specifies the filename, including its extension, of the app's default emoji.
+<- The default emoji filename is cray.gif.
