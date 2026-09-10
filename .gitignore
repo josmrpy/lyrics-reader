@@ -1,1 +1,2 @@
-saved_songs.json
+__pycache__/
+data/saved_songs.json

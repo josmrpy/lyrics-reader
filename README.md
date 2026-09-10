@@ -1,6 +1,6 @@
 # Lyrics Reader
 
-Lyrics Reader is a small Python desktop utility for finding and reading song lyrics one verse at a time.
+Lyrics Reader is a small Python desktop utility for finding and reading song lyrics one line at a time.
 
 This project is part of my personal portfolio, where I document and showcase projects I build while learning and experimenting with software development.
 
@@ -13,8 +13,8 @@ It searches a local JSON cache first and uses the [LRCLIB API](https://lrclib.ne
 * Read lyrics in a compact, always-on-top desktop window.
 * Move forward with `OK`, `Enter`, or `Space`.
 * Return to the previous verse with `Left Arrow`.
-* Supports Spanish and other Unicode lyrics.
-* Uses the included `emoji.gif` animation when available, with a fallback emoji when it is not.
+* Supports Spanish, English and other Unicode lyrics.
+* Uses a configurable animated GIF from `assets/`, with a fallback emoji when it is not available.
 
 ## Requirements
 
@@ -49,16 +49,21 @@ python main.py
 When prompted, enter a song title:
 
 ```text
-=== Buscador de letras v0.1.0 ===
-
+=== Buscador de letras v0.2.0 ===
 Made by Josimar M. (@josmr.py)
 
 Escribe el nombre de la canción: Intruso
 ```
 
-If the song exists in `saved_songs.json`, Lyrics Reader uses that entry. Otherwise, it queries LRCLIB, displays the result, and saves it to `saved_songs.json` for later searches.
+If the song exists in `data/saved_songs.json`, Lyrics Reader uses that entry. Otherwise, it queries LRCLIB, displays the result, and saves it to the local cache for later searches.
 
-The included `emoji.gif` is loaded automatically when it is in the same directory as `main.py`.
+The GIF filename is read from `data/default_emoji.txt`. The default value is `cray.gif`, which is loaded from `assets/`.
+
+To use another included animation, replace the filename in `data/default_emoji.txt`, for example:
+
+```text
+music.gif
+```
 
 ## Reading controls
 
@@ -72,9 +77,10 @@ The included `emoji.gif` is loaded automatically when it is in the same director
 ## Project files
 
 ```text
-main.py          Application code
-saved_songs.json Local lyrics cache
-emoji.gif        Optional animated reader asset
+main.py                   Application code
+assets/                   Animated GIF assets
+data/default_emoji.txt   GIF filename used by the reader
+data/saved_songs.json    Local lyrics cache
 ```
 
 ## About this project
