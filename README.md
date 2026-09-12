@@ -1,5 +1,13 @@
 # Lyrics Reader
 
+![Version](https://img.shields.io/badge/version-0.2.2-3776AB)
+![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python\&logoColor=white)
+![Status](https://img.shields.io/badge/status-active-success)
+
+<p align="center">
+  <img src="assets/music.gif" width="80">
+</p>
+
 Lyrics Reader is a small Python desktop utility for finding and reading song lyrics one line at a time.
 
 This project is part of my personal portfolio, where I document and showcase projects I build while learning and experimenting with software development.
@@ -7,6 +15,10 @@ This project is part of my personal portfolio, where I document and showcase pro
 It searches a local JSON cache first and uses the [LRCLIB API](https://lrclib.net/) when a song is not already saved locally.
 
 ## Features
+
+<p align="right">
+  <img src="assets/search.gif" width="72">
+</p>
 
 * Search for a song by title from a simple terminal prompt.
 * Reuse previously found lyrics without making another network request.
@@ -31,6 +43,10 @@ python -m pip install customtkinter Pillow
 The remaining imports come from Python's standard library.
 
 ## Getting started
+
+<p align="right">
+  <img src="assets/download.gif" width="56">
+</p>
 
 Clone the repository and enter its directory:
 
@@ -67,6 +83,10 @@ music.gif
 
 ## Reading controls
 
+<p align="right">
+  <img src="assets/read.gif" width="56">
+</p>
+
 | Action                       | Control                   |
 | ---------------------------- | ------------------------- |
 | Advance to the next verse    | `OK`, `Enter`, or `Space` |
@@ -77,19 +97,33 @@ music.gif
 ## Project files
 
 ```text
-main.py                   Application code
-assets/                   Animated GIF assets
+main.py                  Application code
+assets/                  Animated GIF assets
 data/default_emoji.txt   GIF filename used by the reader
 data/saved_songs.json    Local lyrics cache
 ```
 
 ## About this project
 
+<p align="right">
+  <img src="assets/scaut.gif" width="72">
+</p>
+
 Lyrics Reader is a personal project created to experiment with Python, desktop interfaces, API integration, local data storage, and keyboard-based interaction.
 
 More projects and experiments can be found on my portfolio:
 
 <https://josmrpy.github.io/>
+
+## Credits
+
+<p align="right">
+  <img src="assets/thank_you2.gif" width="72">
+</p>
+
+The animated GIF emojis included in this project were obtained from the SmileyPak collection by Kolobanga.
+
+Source: <https://kolobanga.ru/en/smileypak>
 
 ## License
 

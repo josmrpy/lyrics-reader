@@ -8,23 +8,42 @@ import urllib.error
 import customtkinter as ctk
 from PIL import Image, ImageSequence
 
-APP_VERSION = "0.2.1"
-ASSETS_DIR = "assets"
-DATA_DIR = "data"
+APP_VERSION = "0.2.2"
+
+# base directories
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ASSETS_DIR = os.path.join(BASE_DIR, "assets")
+DATA_DIR = os.path.join(BASE_DIR, "data")
 
 SONGS_DB = os.path.join(DATA_DIR, "saved_songs.json")
 EMOJI_CONFIG = os.path.join(DATA_DIR, "default_emoji.txt")
 
+# * Default emoji GIF and get the name from the config file
+EMOJI_NAME = "cray.gif"
+
 os.makedirs(DATA_DIR, exist_ok=True)
 
-if not os.path.exists(EMOJI_CONFIG):
-    with open(EMOJI_CONFIG, "w", encoding="utf-8") as f:
-        f.write("cray.gif\n") # Default emoji GIF
 
-with open(EMOJI_CONFIG, "r", encoding="utf-8") as f:
-    EMOJI_NAME = f.readline().strip()
+def write_default_emoji_config():
+    with open(EMOJI_CONFIG, "w", encoding="utf-8") as f:
+        f.write(EMOJI_NAME + "\n")
+
+
+try:  # check if the emoji config file exists nor is empty
+    with open(EMOJI_CONFIG, "r", encoding="utf-8") as f:
+        first_line = f.readline().strip()
+
+        if first_line:
+            EMOJI_NAME = first_line
+        else:
+            raise ValueError("Empty emoji config file")
+except (FileNotFoundError, ValueError):
+    write_default_emoji_config()
+
 
 EMOJI_GIF = os.path.join(ASSETS_DIR, EMOJI_NAME)
+
+# Constants for GUI
 GIF_ANIM_INTERVAL = 100
 GIF_SIZE = (62, 44)
 SAMPLE_SIZE = 32
@@ -66,7 +85,9 @@ def search_database(db, name):
     )
 
 
-def search_on_lrclib(song_name):
+# * Search lyrics from LRCLIB API // main feature
+# TODO: Add more sources for lyrics search
+def search_on_lrclib(song_name) -> tuple[str | None, str | None, str | None]:
     try:
         url = f"https://lrclib.net/api/search?q={urllib.parse.quote(song_name)}"
         request = urllib.request.Request(
@@ -111,6 +132,7 @@ def create_gif_frames(frames, size):
     return [ctk.CTkImage(light_image=f, dark_image=f, size=size) for f in frames]
 
 
+# * Lyrics Windows Class // main gui window
 class LyricsWindows(ctk.CTkToplevel):
     def __init__(self, master, title, verses, gif_frames):  # @josmr.py
         super().__init__(master)
@@ -176,15 +198,15 @@ class LyricsWindows(ctk.CTkToplevel):
         )
         close_button.pack(side="right")
 
-        self.label_titulo = ctk.CTkLabel(
+        self.title_label = ctk.CTkLabel(
             bar_frame,
             text=self.title.lower(),
             font=("Consolas", 12),
             text_color="#555555",
         )
-        self.label_titulo.pack(side="left")
+        self.title_label.pack(side="left")
 
-        for widget in (bar_frame, self.label_titulo):
+        for widget in (bar_frame, self.title_label):
             widget.bind("<ButtonPress-1>", self.start_drag)
             widget.bind("<B1-Motion>", self.drag)
 
@@ -225,7 +247,8 @@ class LyricsWindows(ctk.CTkToplevel):
         if self.gif_frames:
             self.animate_gif()
         else:
-            self.gif_label.configure(text="😔", font=("Segoe UI Emoji", SAMPLE_SIZE))
+            print(f"! No se pudo cargar el GIF del emoji '{EMOJI_NAME}'")
+            self.gif_label.configure(text=":)", font=("Segoe UI Emoji", SAMPLE_SIZE))
 
     def get_button_text(self):
         return "Cerrar" if self.index == len(self.verses) - 1 else "OK"
@@ -262,7 +285,7 @@ class LyricsWindows(ctk.CTkToplevel):
         self.master.destroy()
 
 
-def search_from_terminal():
+def search_from_terminal() -> tuple[str | None, str | None]:
     song_name = input("Escribe el nombre de la canción: ").strip()
 
     if not song_name:
@@ -300,10 +323,8 @@ def main():
     root = ctk.CTk()
     root.withdraw()
 
-    gif_frames = create_gif_frames(
-        load_gif_frames(EMOJI_GIF, GIF_SIZE),
-        GIF_SIZE,
-    )
+    loaded_frames = load_gif_frames(EMOJI_GIF, GIF_SIZE)
+    gif_frames = create_gif_frames(loaded_frames, GIF_SIZE)
 
     LyricsWindows(root, title, split_into_verses(lyrics), gif_frames)
     root.mainloop()
