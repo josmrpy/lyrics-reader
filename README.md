@@ -1,6 +1,6 @@
 # Lyrics Reader
 
-![Version](https://img.shields.io/badge/version-0.2.2-3776AB)
+![Version](https://img.shields.io/badge/version-0.2.3-3776AB)
 ![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python\&logoColor=white)
 ![Status](https://img.shields.io/badge/status-active-success)
 
@@ -73,13 +73,15 @@ Escribe el nombre de la canción: Intruso
 
 If the song exists in `data/saved_songs.json`, Lyrics Reader uses that entry. Otherwise, it queries LRCLIB, displays the result, and saves it to the local cache for later searches.
 
-The GIF filename is read from `data/default_emoji.txt`. The default value is `cray.gif`, which is loaded from `assets/`.
+The GIF filename is read from `data/default_emoji.txt`. The default value is `cray.gif`, which is loaded from `assets/`. You can edit this file to choose any other GIF included in the assets folder.
 
 To use another included animation, replace the filename in `data/default_emoji.txt`, for example:
 
 ```text
 music.gif
 ```
+
+The complete emoji catalog, including previews and filenames, is available in [`assets.md`](assets.md).
 
 ## Reading controls
 
@@ -98,7 +100,8 @@ music.gif
 
 ```text
 main.py                  Application code
-assets/                  Animated GIF assets
+  assets/                  Animated GIF assets
+  assets.md                Emoji catalog, configuration notes, and credits
 data/default_emoji.txt   GIF filename used by the reader
 data/saved_songs.json    Local lyrics cache
 ```

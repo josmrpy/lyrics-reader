@@ -8,7 +8,7 @@ import urllib.error
 import customtkinter as ctk
 from PIL import Image, ImageSequence
 
-APP_VERSION = "0.2.2"
+APP_VERSION = "0.2.3"
 
 # base directories
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -89,7 +89,8 @@ def search_database(db, name):
 # TODO: Add more sources for lyrics search
 def search_on_lrclib(song_name) -> tuple[str | None, str | None, str | None]:
     try:
-        url = f"https://lrclib.net/api/search?q={urllib.parse.quote(song_name)}"
+        lrclib_url = "https://lrclib.net/api/search?q="
+        url = lrclib_url + urllib.parse.quote(song_name)
         request = urllib.request.Request(
             url, headers={"User-Agent": "LyricsSearcher/1.0 (personal use)"}
         )
@@ -200,7 +201,7 @@ class LyricsWindows(ctk.CTkToplevel):
 
         self.title_label = ctk.CTkLabel(
             bar_frame,
-            text=self.title.lower(),
+            text=self.title,
             font=("Consolas", 12),
             text_color="#555555",
         )
@@ -258,7 +259,9 @@ class LyricsWindows(ctk.CTkToplevel):
         self.y_offset = event.y_root - self.winfo_y()
 
     def drag(self, event):
-        self.geometry(f"+{event.x_root - self.x_offset}+{event.y_root - self.y_offset}")
+        x = event.x_root - self.x_offset
+        y = event.y_root - self.y_offset
+        self.geometry(f"+{x}+{y}")
 
     def animate_gif(self):
         self.gif_label.configure(image=self.gif_frames[self.gif_index])
